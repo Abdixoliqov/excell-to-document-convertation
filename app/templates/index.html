@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Website menu 03</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+	
+	<link rel="stylesheet" href="{% static "css/style.css" %}">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<nav style="box-shadow: 1px 1px 5px 1px rgba(163, 163, 163, 0.683);padding: 7px 0;" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	    	<a class="navbar-brand" href="{% url "app:index" %}">MTRK</a>
+	    	<form method="get" class="searchform order-sm-start order-lg-last" style="box-shadow: 0 0 1px 1px rgba(163, 163, 163, 0.075);">
+				<div class="form-group d-flex">
+					<input name="q" value="{{q}}" type="text" class="form-control pl-3" placeholder="Search">
+					<button type="submit" placeholder="" class="form-control search"><span class="fa fa-search"></span></button>
+				</div>
+			</form>
+			<div class="collapse navbar-collapse" id="ftco-nav">
+				<ul class="navbar-nav m-auto">
+					<li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="#" class="nav-link">Catalog</a></li>
+					<li class="nav-item"><a href="#" class="nav-link">Work</a></li>
+					<li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+					<li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+				</ul>
+			</div>
+			<div class="order-sm-start order-lg-last">
+				<a class="btn btn-outline-danger" style="border-radius: 20px;margin-left: 20px;" href="{% url "auth:logout" %}" role="button">Logout</a>
+			</div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+	</section>
+	{% if messages %}
+	<div class="container" style="position: relative;">
+		<div class="alert alert-danger alert-dismissible fade show" style="position: absolute;top: 20px;right: -50px;border-radius: 20px;box-shadow: 1px 1px 4px 2px rgba(186, 186, 186, 0.342);border: none;" role="alert">
+			{% for message in messages %}
+				<strong>{{ message }}</strong>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	<!-- {% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+		<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %} -->
+
+	<main>
+		<div class="container">
+			<div class="d-flex justify-content-center" style="margin: 90px 0 60px 0;">
+				<form action="{% url "app:add-file" %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<div class="form-row align-items-center">
+						<input name="excel-file" style="width: 250px;border: 1px solid rgb(148, 148, 148); border-radius: 15px;background: rgb(255, 255, 255);box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;" type="file" name="" id="">
+						<div class="col-auto my-1">
+							<button style="border-radius: 50%;width: 35px;height: 35px;" type="submit" class="btn btn-outline-primary d-flex justify-content-center"><i class="fa-solid fa-file-arrow-up" style="font-size: 22px; margin-left: 0;padding-left: 0;"></i></button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="container" style="padding: 0 100px;">
+		<a class="btn btn-outline-danger float-right mb-3" style="border-radius: 20px;" href="{% url "app:delete-file" %}" role="button">Clear</a>
+			<table class="table">
+				<thead>
+				  <tr>
+					<th scope="col">#</th>
+					<th style="width: 300px;" scope="col">File Name</th>
+					<th scope="col">Date</th>
+					<th scope="col">Handle</th>
+					<th style="width: 100px;" scope="col">Action</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for file in files %}
+					<tr>
+						<th scope="row">{{file.pk}}</th>
+						<td>{{file.excel_file}}</td>
+						<td>{{ file.created|date:"Y-m-d"}}</td>
+						<td>@mdo</td>
+						<td class="d-flex justify-content-center" style="width: 100px;padding-left: 17px;">
+							<a style="border-radius: 50%; margin-right: 5px;" class="btn btn-outline-danger" class="btn btn-primary" href="{% url "app:one-delete" file.pk %}" role="button"><i class="fa-solid fa-trash"></i></a>
+							<a style="border-radius: 50%;" class="btn btn-outline-primary" href="{% url "app:download" file.pk %}" role="button"><i style="font-size: 17px;" class="fa-solid fa-file-arrow-down"></i></a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			  </table>
+		</div>
+		
+	</main>
+
+	<script src="{% static "js/jquery.min.js" %}"></script>
+  <script src="{% static "js/popper.js" %}"></script>
+  <script src="{% static "js/bootstrap.min.js" %}"></script>
+  <script src="{% static "js/main.js" %}"></script>
+
+	</body>
+</html>
+
